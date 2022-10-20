@@ -1,0 +1,18 @@
+{
+    "domain": "aton_storage",
+    "name": "Aton Storage",
+    "config_flow": true,
+    "documentation": "https://www.home-assistant.io/integrations/aton_storage",
+    "requirements": [
+      "pyaton"
+    ],
+    "ssdp": [],
+    "zeroconf": [],
+    "homekit": {},
+    "dependencies": [],
+    "codeowners": [
+      "@LucaPatarca"
+    ],
+    "iot_class": "cloud_polling"
+  }
+  
