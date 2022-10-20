@@ -1,8 +1,10 @@
 {
-    "domain": "aton_storage",
-    "name": "Aton Storage",
+    "domain": "aton_storage_unofficial",
+    "name": "Aton Storage Unofficial",
+    "version":"0.0.1",
     "config_flow": true,
-    "documentation": "https://www.home-assistant.io/integrations/aton_storage",
+    "documentation": "https://github.com/LucaPatarca/homeassistant_aton",
+    "issue_traker": "https://github.com/LucaPatarca/homeassistant_aton/issues",
     "requirements": [
       "pyaton"
     ],
