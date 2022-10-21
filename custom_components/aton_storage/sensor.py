@@ -48,11 +48,13 @@ async def async_setup_entry(
 
     add_entities(
         [
+            #power
             BatteryStatus(coordinator),
             HouseConsumption(coordinator),
             BatteryPower(coordinator),
             SolarProduction(coordinator),
             GridPower(coordinator),
+            #power direction
             GridToHouse(coordinator),
             SolarToBattery(coordinator),
             SolarToGrid(coordinator),
@@ -60,6 +62,14 @@ async def async_setup_entry(
             SolarToHouse(coordinator),
             GridToBattery(coordinator),
             BatteryToGrid(coordinator),
+            #energy
+            SoldEnergy(coordinator),
+            SolarEnergy(coordinator),
+            SelfConsumedEnergy(coordinator),
+            BoughtEnergy(coordinator),
+            ConsumedEnergy(coordinator),
+            #other
+            SelfSufficiency(coordinator),
         ]
     )
 
@@ -312,3 +322,114 @@ class BatteryToGrid(BaseBinarySensor):
     @property
     def is_on(self) -> bool:
         return self.coordinator.api.status.battery_to_grid
+
+
+class BaseEnergySensor(SensorEntity, CoordinatorEntity):
+    """Representation of a Sensor."""
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        return {
+            "identifiers": {(DOMAIN, "aton_storage_" + self.coordinator.api.username)}
+        }
+
+    def __init__(self, coordinator: ApiCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_native_unit_of_measurement = ENERGY_WATT_HOUR
+        self._attr_device_class = SensorDeviceClass.ENERGY
+        self._attr_state_class = SensorStateClass.MEASUREMENT
+
+    def update(self) -> None:
+        """update"""
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        self.update()
+        self.async_write_ha_state()
+
+
+class SoldEnergy(BaseEnergySensor):
+    """Representation of a Sensor"""
+
+    def __init__(self,coordinator: ApiCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_name = "Energia Venduta"
+        self._attr_unique_id = "aton_sold_energy_"+coordinator.api.username
+
+    def update(self) -> None:
+        self._attr_native_value = self.coordinator.api.sold_energy
+
+
+class SolarEnergy(BaseEnergySensor):
+    """Representation of a Sensor"""
+
+    def __init__(self,coordinator: ApiCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_name = "Energia Solare"
+        self._attr_unique_id = "aton_solar_energy_"+coordinator.api.username
+
+    def update(self) -> None:
+        self._attr_native_value = self.coordinator.api.solar_energy
+
+
+class SelfConsumedEnergy(BaseEnergySensor):
+    """Representation of a Sensor"""
+
+    def __init__(self,coordinator: ApiCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_name = "Energia Auto Consumata"
+        self._attr_unique_id = "aton_self_energy_"+coordinator.api.username
+
+    def update(self) -> None:
+        self._attr_native_value = self.coordinator.api.self_consumed_energy
+
+
+class BoughtEnergy(BaseEnergySensor):
+    """Representation of a Sensor"""
+
+    def __init__(self,coordinator: ApiCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_name = "Energia Comprata"
+        self._attr_unique_id = "aton_bought_energy_"+coordinator.api.username
+
+    def update(self) -> None:
+        self._attr_native_value = self.coordinator.api.bought_energy
+
+
+class ConsumedEnergy(BaseEnergySensor):
+    """Representation of a Sensor"""
+
+    def __init__(self,coordinator: ApiCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_name = "Energia Consumata"
+        self._attr_unique_id = "aton_consumed_energy_"+coordinator.api.username
+
+    def update(self) -> None:
+        self._attr_native_value = self.coordinator.api.consumed_energy
+
+class SelfSufficiency(SensorEntity, CoordinatorEntity):
+    """Representation of a Sensor."""
+
+    @property
+    def device_info(self) -> DeviceInfo | None:
+        return {
+            "identifiers": {
+                (DOMAIN, "aton_storage_" + self.coordinator.api.username)
+            },
+        }
+
+    def __init__(self, coordinator: ApiCoordinator) -> None:
+        super().__init__(coordinator)
+        self._attr_name = "Autosufficienza"
+        self._attr_native_unit_of_measurement = PERCENTAGE
+        self._attr_device_class = SensorDeviceClass.POWER_FACTOR
+        self._attr_state_class = SensorStateClass.MEASUREMENT
+        self._attr_unique_id = "aton_self_sufficiency_" + coordinator.api.username
+
+    @callback
+    def _handle_coordinator_update(self) -> None:
+        """Handle updated data from the coordinator."""
+        self._attr_native_value = self.coordinator.api.status.self_sufficiency
+        self.async_write_ha_state()
+
