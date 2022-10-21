@@ -358,7 +358,7 @@ class SoldEnergy(BaseEnergySensor):
         self._attr_unique_id = "aton_sold_energy_"+coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.sold_energy
+        self._attr_native_value = self.coordinator.api.status.sold_energy
 
 
 class SolarEnergy(BaseEnergySensor):
@@ -370,7 +370,7 @@ class SolarEnergy(BaseEnergySensor):
         self._attr_unique_id = "aton_solar_energy_"+coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.solar_energy
+        self._attr_native_value = self.coordinator.api.status.solar_energy
 
 
 class SelfConsumedEnergy(BaseEnergySensor):
@@ -382,7 +382,7 @@ class SelfConsumedEnergy(BaseEnergySensor):
         self._attr_unique_id = "aton_self_energy_"+coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.self_consumed_energy
+        self._attr_native_value = self.coordinator.api.status.self_consumed_energy
 
 
 class BoughtEnergy(BaseEnergySensor):
@@ -394,7 +394,7 @@ class BoughtEnergy(BaseEnergySensor):
         self._attr_unique_id = "aton_bought_energy_"+coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.bought_energy
+        self._attr_native_value = self.coordinator.api.status.bought_energy
 
 
 class ConsumedEnergy(BaseEnergySensor):
@@ -406,7 +406,7 @@ class ConsumedEnergy(BaseEnergySensor):
         self._attr_unique_id = "aton_consumed_energy_"+coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.consumed_energy
+        self._attr_native_value = self.coordinator.api.status.consumed_energy
 
 class SelfSufficiency(SensorEntity, CoordinatorEntity):
     """Representation of a Sensor."""
@@ -415,7 +415,7 @@ class SelfSufficiency(SensorEntity, CoordinatorEntity):
     def device_info(self) -> DeviceInfo | None:
         return {
             "identifiers": {
-                (DOMAIN, "aton_storage_" + self.coordinator.api.username)
+                (DOMAIN, "aton_storage_" + self.coordinator.status.api.username)
             },
         }
 
