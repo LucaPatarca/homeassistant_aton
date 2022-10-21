@@ -1,5 +1,5 @@
 {
-    "domain": "aton_storage_unofficial",
+    "domain": "aton_storage",
     "name": "Aton Storage Unofficial",
     "version":"0.0.1",
     "config_flow": true,
