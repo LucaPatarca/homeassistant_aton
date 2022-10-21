@@ -415,7 +415,7 @@ class SelfSufficiency(SensorEntity, CoordinatorEntity):
     def device_info(self) -> DeviceInfo | None:
         return {
             "identifiers": {
-                (DOMAIN, "aton_storage_" + self.coordinator.status.api.username)
+                (DOMAIN, "aton_storage_" + self.coordinator.api.username)
             },
         }
 
