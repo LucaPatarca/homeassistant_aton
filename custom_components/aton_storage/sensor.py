@@ -337,7 +337,7 @@ class BaseEnergySensor(SensorEntity, CoordinatorEntity):
         super().__init__(coordinator)
         self._attr_native_unit_of_measurement = ENERGY_WATT_HOUR
         self._attr_device_class = SensorDeviceClass.ENERGY
-        self._attr_state_class = SensorStateClass.MEASUREMENT
+        self._attr_state_class = SensorStateClass.TOTAL_INCREASING
 
     def update(self) -> None:
         """update"""
@@ -430,6 +430,6 @@ class SelfSufficiency(SensorEntity, CoordinatorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._attr_native_value = self.coordinator.api.status.self_sufficiency
+        self._attr_native_value = round(self.coordinator.api.status.self_sufficiency, 2)
         self.async_write_ha_state()
 
