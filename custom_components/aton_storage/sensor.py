@@ -41,7 +41,9 @@ async def async_setup_entry(
     username = config.data["username"]
     sn = config.data["sn"]
     id_impianto = config.data["id_impianto"]
-    api = AtonAPI(username, sn, id_impianto)
+    api = await hass.async_add_executor_job(
+        AtonAPI, username, sn, id_impianto
+    )
     api.cookies = config.data["cookies"]
     coordinator = ApiCoordinator(hass, api)
 
