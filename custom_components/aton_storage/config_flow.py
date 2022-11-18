@@ -47,6 +47,7 @@ async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str,
         "sn": api.sn,
         "id_impianto": api.id_impianto,
         "username": api.username,
+        "cookies": api.cookies,
     }
 
 

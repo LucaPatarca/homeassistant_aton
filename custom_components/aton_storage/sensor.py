@@ -42,6 +42,7 @@ async def async_setup_entry(
     sn = config.data["sn"]
     id_impianto = config.data["id_impianto"]
     api = AtonAPI(username, sn, id_impianto)
+    api.cookies = config.data["cookies"]
     coordinator = ApiCoordinator(hass, api)
 
     await coordinator.async_config_entry_first_refresh()
