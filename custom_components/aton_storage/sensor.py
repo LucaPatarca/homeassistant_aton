@@ -9,7 +9,7 @@ from homeassistant.components.binary_sensor import BinarySensorEntity
 # from homeassistant.exceptions import ConfigEntryAuthFailed
 
 from homeassistant.helpers.entity import DeviceInfo
-from pyaton import AtonAPI
+from pyaton import AtonAPI, NoAuth, CommunicationFailed
 from .const import DOMAIN
 
 from homeassistant.components.sensor import (
@@ -100,11 +100,11 @@ class ApiCoordinator(DataUpdateCoordinator):
             # handled by the data update coordinator.
             async with async_timeout.timeout(self.api.interval):
                 return await self.hass.async_add_executor_job(self.api.fetch_data)
-        except Exception as err:
+        except NoAuth as err:
             # Raising ConfigEntryAuthFailed will cancel future updates
             # and start a config flow with SOURCE_REAUTH (async_step_reauth)
-            # raise ConfigEntryAuthFailed from err
-            # except ApiError as err:
+            raise ConfigEntryAuthFailed from err
+        except CommunicationFailed as err:
             raise UpdateFailed(f"Error communicating with API: {err}")
 
 
