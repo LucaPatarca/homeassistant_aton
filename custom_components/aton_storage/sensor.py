@@ -136,7 +136,7 @@ class BatteryStatus(SensorEntity, CoordinatorEntity):
     @callback
     def _handle_coordinator_update(self) -> None:
         """Handle updated data from the coordinator."""
-        self._attr_native_value = self.coordinator.api.status.current_battery_status
+        self._attr_native_value = self.coordinator.api.status.battery_status
         self.async_write_ha_state()
 
 
@@ -174,7 +174,7 @@ class HouseConsumption(BasePowerSensor):
         self._attr_unique_id = "aton_home_" + coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.status.current_house_consumption
+        self._attr_native_value = self.coordinator.api.status.house_consumption
 
 
 class BatteryPower(BasePowerSensor):
@@ -186,7 +186,7 @@ class BatteryPower(BasePowerSensor):
         self._attr_unique_id = "aton_battery_power_" + coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.status.current_battery_power
+        self._attr_native_value = self.coordinator.api.status.battery_power
 
 
 class SolarProduction(BasePowerSensor):
@@ -198,7 +198,7 @@ class SolarProduction(BasePowerSensor):
         self._attr_unique_id = "aton_solar_power_" + coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.status.current_solar_production
+        self._attr_native_value = self.coordinator.api.status.solar_production
 
 
 class GridPower(BasePowerSensor):
@@ -210,7 +210,7 @@ class GridPower(BasePowerSensor):
         self._attr_unique_id = "aton_grid_power_" + coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.status.current_grid_power
+        self._attr_native_value = self.coordinator.api.status.grid_power
 
 
 class BaseBinarySensor(BinarySensorEntity, CoordinatorEntity):
@@ -246,7 +246,7 @@ class GridToHouse(BaseBinarySensor):
 
     @property
     def is_on(self) -> bool:
-        return self.coordinator.api.status.grid_to_house
+        return self.coordinator.api.status.is_grid_to_house
 
 
 class SolarToBattery(BaseBinarySensor):
@@ -259,7 +259,7 @@ class SolarToBattery(BaseBinarySensor):
 
     @property
     def is_on(self) -> bool:
-        return self.coordinator.api.status.solar_to_battery
+        return self.coordinator.api.status.is_solar_to_battery
 
 
 class SolarToGrid(BaseBinarySensor):
@@ -272,7 +272,7 @@ class SolarToGrid(BaseBinarySensor):
 
     @property
     def is_on(self) -> bool:
-        return self.coordinator.api.status.solar_to_grid
+        return self.coordinator.api.status.is_solar_to_grid
 
 
 class BatteryToHouse(BaseBinarySensor):
@@ -285,7 +285,7 @@ class BatteryToHouse(BaseBinarySensor):
 
     @property
     def is_on(self) -> bool:
-        return self.coordinator.api.status.battery_to_house
+        return self.coordinator.api.status.is_battery_to_house
 
 
 class SolarToHouse(BaseBinarySensor):
@@ -298,7 +298,7 @@ class SolarToHouse(BaseBinarySensor):
 
     @property
     def is_on(self) -> bool:
-        return self.coordinator.api.status.solar_to_house
+        return self.coordinator.api.status.is_solar_to_house
 
 
 class GridToBattery(BaseBinarySensor):
@@ -311,7 +311,7 @@ class GridToBattery(BaseBinarySensor):
 
     @property
     def is_on(self) -> bool:
-        return self.coordinator.api.status.grid_to_battery
+        return self.coordinator.api.status.is_grid_to_battery
 
 
 class BatteryToGrid(BaseBinarySensor):
@@ -324,7 +324,7 @@ class BatteryToGrid(BaseBinarySensor):
 
     @property
     def is_on(self) -> bool:
-        return self.coordinator.api.status.battery_to_grid
+        return self.coordinator.api.status.is_battery_to_grid
 
 
 class BaseEnergySensor(SensorEntity, CoordinatorEntity):
