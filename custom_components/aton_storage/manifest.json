@@ -1,12 +1,12 @@
 {
     "domain": "aton_storage",
     "name": "Aton Storage Unofficial",
-    "version":"0.0.2",
+    "version":"0.0.4",
     "config_flow": true,
     "documentation": "https://github.com/LucaPatarca/homeassistant_aton",
     "issue_traker": "https://github.com/LucaPatarca/homeassistant_aton/issues",
     "requirements": [
-      "pyaton==0.0.4"
+      "pyaton==0.0.5"
     ],
     "ssdp": [],
     "zeroconf": [],

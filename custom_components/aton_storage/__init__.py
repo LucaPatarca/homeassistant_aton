@@ -16,10 +16,6 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Aton Storage from a config entry."""
 
     hass.data.setdefault(DOMAIN, {})
-    # TODO 1. Create API instance
-    # TODO 2. Validate the API connection (and authentication)
-    # TODO 3. Store an API object for your platforms to access
-    # hass.data[DOMAIN][entry.entry_id] = MyApi(...)
 
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
