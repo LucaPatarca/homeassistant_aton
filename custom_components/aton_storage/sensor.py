@@ -127,7 +127,7 @@ class BatteryStatus(SensorEntity, CoordinatorEntity):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Batteria Casa"
+        self._attr_name = coordinator.api.username + " Batteria Casa"
         self._attr_native_unit_of_measurement = PERCENTAGE
         self._attr_device_class = SensorDeviceClass.BATTERY
         self._attr_state_class = SensorStateClass.MEASUREMENT
@@ -170,7 +170,7 @@ class HouseConsumption(BasePowerSensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Consumo Casa"
+        self._attr_name = coordinator.api.username + " Consumo Casa"
         self._attr_unique_id = "aton_home_" + coordinator.api.username
 
     def update(self) -> None:
@@ -182,7 +182,7 @@ class BatteryPower(BasePowerSensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Corrente Batteria"
+        self._attr_name = coordinator.api.username + " Potenza Batteria"
         self._attr_unique_id = "aton_battery_power_" + coordinator.api.username
 
     def update(self) -> None:
@@ -194,7 +194,7 @@ class SolarProduction(BasePowerSensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Produzione Pannelli"
+        self._attr_name = coordinator.api.username + " Produzione Pannelli"
         self._attr_unique_id = "aton_solar_power_" + coordinator.api.username
 
     def update(self) -> None:
@@ -206,11 +206,11 @@ class GridPower(BasePowerSensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Corrente Rete"
+        self._attr_name = coordinator.api.username + " Potenza Rete"
         self._attr_unique_id = "aton_grid_power_" + coordinator.api.username
 
     def update(self) -> None:
-        self._attr_native_value = self.coordinator.api.status.grid_power
+        self._attr_native_value = self.coordinator.api.status.grid_power * -1
 
 
 class BaseBinarySensor(BinarySensorEntity, CoordinatorEntity):
@@ -241,7 +241,7 @@ class GridToHouse(BaseBinarySensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Da Rete a Casa"
+        self._attr_name = coordinator.api.username + " Da Rete a Casa"
         self._attr_unique_id = "aton_grid_house_" + coordinator.api.username
 
     @property
@@ -254,7 +254,7 @@ class SolarToBattery(BaseBinarySensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Da Pannelli a Batteria"
+        self._attr_name = coordinator.api.username + " Da Pannelli a Batteria"
         self._attr_unique_id = "aton_solar_battery_" + coordinator.api.username
 
     @property
@@ -267,7 +267,7 @@ class SolarToGrid(BaseBinarySensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Da Pannelli a Rete"
+        self._attr_name = coordinator.api.username + " Da Pannelli a Rete"
         self._attr_unique_id = "aton_solar_grid_" + coordinator.api.username
 
     @property
@@ -280,7 +280,7 @@ class BatteryToHouse(BaseBinarySensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Da Batteria a Casa"
+        self._attr_name = coordinator.api.username + " Da Batteria a Casa"
         self._attr_unique_id = "aton_battery_house_" + coordinator.api.username
 
     @property
@@ -293,7 +293,7 @@ class SolarToHouse(BaseBinarySensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Da Pannelli a Casa"
+        self._attr_name = coordinator.api.username + " Da Pannelli a Casa"
         self._attr_unique_id = "aton_solar_house_" + coordinator.api.username
 
     @property
@@ -306,7 +306,7 @@ class GridToBattery(BaseBinarySensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Da Rete a Batteria"
+        self._attr_name = coordinator.api.username + " Da Rete a Batteria"
         self._attr_unique_id = "aton_grid_battery_" + coordinator.api.username
 
     @property
@@ -319,7 +319,7 @@ class BatteryToGrid(BaseBinarySensor):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Da Batteria a Rete"
+        self._attr_name = coordinator.api.username + " Da Batteria a Rete"
         self._attr_unique_id = "aton_battery_grid_" + coordinator.api.username
 
     @property
@@ -357,7 +357,7 @@ class SoldEnergy(BaseEnergySensor):
 
     def __init__(self,coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Energia Venduta"
+        self._attr_name = coordinator.api.username + " Energia Venduta"
         self._attr_unique_id = "aton_sold_energy_"+coordinator.api.username
 
     def update(self) -> None:
@@ -369,7 +369,7 @@ class SolarEnergy(BaseEnergySensor):
 
     def __init__(self,coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Energia Solare"
+        self._attr_name = coordinator.api.username + " Energia Solare"
         self._attr_unique_id = "aton_solar_energy_"+coordinator.api.username
 
     def update(self) -> None:
@@ -381,7 +381,7 @@ class SelfConsumedEnergy(BaseEnergySensor):
 
     def __init__(self,coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Energia Auto Consumata"
+        self._attr_name = coordinator.api.username + " Energia Auto Consumata"
         self._attr_unique_id = "aton_self_energy_"+coordinator.api.username
 
     def update(self) -> None:
@@ -393,7 +393,7 @@ class BoughtEnergy(BaseEnergySensor):
 
     def __init__(self,coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Energia Comprata"
+        self._attr_name = coordinator.api.username + " Energia Comprata"
         self._attr_unique_id = "aton_bought_energy_"+coordinator.api.username
 
     def update(self) -> None:
@@ -405,7 +405,7 @@ class ConsumedEnergy(BaseEnergySensor):
 
     def __init__(self,coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Energia Consumata"
+        self._attr_name = coordinator.api.username + " Energia Consumata"
         self._attr_unique_id = "aton_consumed_energy_"+coordinator.api.username
 
     def update(self) -> None:
@@ -424,7 +424,7 @@ class SelfSufficiency(SensorEntity, CoordinatorEntity):
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
-        self._attr_name = "Autosufficienza"
+        self._attr_name = coordinator.api.username + " Autosufficienza"
         self._attr_native_unit_of_measurement = PERCENTAGE
         self._attr_device_class = SensorDeviceClass.POWER_FACTOR
         self._attr_state_class = SensorStateClass.MEASUREMENT
