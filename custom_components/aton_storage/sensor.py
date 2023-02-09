@@ -6,7 +6,7 @@ import logging
 import async_timeout
 from homeassistant.components.binary_sensor import BinarySensorEntity
 
-# from homeassistant.exceptions import ConfigEntryAuthFailed
+from homeassistant.exceptions import ConfigEntryAuthFailed
 
 from homeassistant.helpers.entity import DeviceInfo
 from pyaton import AtonAPI, NoAuth, CommunicationFailed
