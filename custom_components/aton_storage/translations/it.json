@@ -1,0 +1,30 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Il dispositivo è gia configurato",
+            "reauth_successful": "Ri-autenticazione completata con successo"
+        },
+        "error": {
+            "cannot_connect": "Impossibile connettersi",
+            "invalid_auth": "Autenticazione non valida",
+            "unknown": "Errore sconosciuto"
+        },
+        "step": {
+            "user": {
+                "title": "Autenticazione",
+                "data": {
+                    "password": "Password",
+                    "username": "Username"
+                }
+            },
+            "reauth_confirm": {
+                "title": "Ri-autenticazione",
+                "description": "Aton Storage necessita di ri-autenticazione",
+                "data": {
+                    "password": "Password",
+                    "username": "Username"
+                }
+            }
+        }
+    }
+}
