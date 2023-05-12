@@ -10,7 +10,11 @@
         },
         "reauth_confirm": {
           "title": "[%key:common::config_flow::title::reauth%]",
-          "description": "Aton Storage necessita di riautenticare il tuo account"
+          "description": "Aton Storage necessita di riautenticare il tuo account",
+          "data": {
+            "username": "[%key:common::config_flow::data::username%]",
+            "password": "[%key:common::config_flow::data::password%]"
+          }
         }
       },
       "error": {
@@ -24,4 +28,4 @@
       }
     }
   }
-  
+

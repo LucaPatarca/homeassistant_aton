@@ -41,23 +41,19 @@ async def async_setup_entry(
     username = config.data["username"]
     sn = config.data["sn"]
     id_impianto = config.data["id_impianto"]
-    api = await hass.async_add_executor_job(
-        AtonAPI, username, sn, id_impianto
-    )
+    api = await hass.async_add_executor_job(AtonAPI, username, sn, id_impianto)
     api.cookies = config.data["cookies"]
     coordinator = ApiCoordinator(hass, api)
 
-    await coordinator.async_config_entry_first_refresh()
-
     add_entities(
         [
-            #power
+            # power
             BatteryStatus(coordinator),
             HouseConsumption(coordinator),
             BatteryPower(coordinator),
             SolarProduction(coordinator),
             GridPower(coordinator),
-            #power direction
+            # power direction
             GridToHouse(coordinator),
             SolarToBattery(coordinator),
             SolarToGrid(coordinator),
@@ -65,13 +61,13 @@ async def async_setup_entry(
             SolarToHouse(coordinator),
             GridToBattery(coordinator),
             BatteryToGrid(coordinator),
-            #energy
+            # energy
             SoldEnergy(coordinator),
             SolarEnergy(coordinator),
             SelfConsumedEnergy(coordinator),
             BoughtEnergy(coordinator),
             ConsumedEnergy(coordinator),
-            #other
+            # other
             SelfSufficiency(coordinator),
         ]
     )
@@ -80,7 +76,7 @@ async def async_setup_entry(
 class ApiCoordinator(DataUpdateCoordinator):
     """My custom coordinator."""
 
-    def __init__(self, hass, api: AtonAPI):
+    def __init__(self, hass: HomeAssistant | None, api: AtonAPI) -> None:
         """Initialize my coordinator."""
         super().__init__(
             hass,
@@ -106,9 +102,9 @@ class ApiCoordinator(DataUpdateCoordinator):
         except NoAuth as err:
             # Raising ConfigEntryAuthFailed will cancel future updates
             # and start a config flow with SOURCE_REAUTH (async_step_reauth)
-            raise ConfigEntryAuthFailed from err
+            raise ConfigEntryAuthFailed(err) from err
         except CommunicationFailed as err:
-            raise UpdateFailed(f"Error communicating with API: {err}")
+            raise UpdateFailed(f"Error communicating with API: {err}") from err
 
 
 class BatteryStatus(SensorEntity, CoordinatorEntity):
@@ -355,10 +351,10 @@ class BaseEnergySensor(SensorEntity, CoordinatorEntity):
 class SoldEnergy(BaseEnergySensor):
     """Representation of a Sensor"""
 
-    def __init__(self,coordinator: ApiCoordinator) -> None:
+    def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
         self._attr_name = coordinator.api.username + " Energia Venduta"
-        self._attr_unique_id = "aton_sold_energy_"+coordinator.api.username
+        self._attr_unique_id = "aton_sold_energy_" + coordinator.api.username
 
     def update(self) -> None:
         self._attr_native_value = self.coordinator.api.status.sold_energy
@@ -367,10 +363,10 @@ class SoldEnergy(BaseEnergySensor):
 class SolarEnergy(BaseEnergySensor):
     """Representation of a Sensor"""
 
-    def __init__(self,coordinator: ApiCoordinator) -> None:
+    def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
         self._attr_name = coordinator.api.username + " Energia Solare"
-        self._attr_unique_id = "aton_solar_energy_"+coordinator.api.username
+        self._attr_unique_id = "aton_solar_energy_" + coordinator.api.username
 
     def update(self) -> None:
         self._attr_native_value = self.coordinator.api.status.solar_energy
@@ -379,10 +375,10 @@ class SolarEnergy(BaseEnergySensor):
 class SelfConsumedEnergy(BaseEnergySensor):
     """Representation of a Sensor"""
 
-    def __init__(self,coordinator: ApiCoordinator) -> None:
+    def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
         self._attr_name = coordinator.api.username + " Energia Auto Consumata"
-        self._attr_unique_id = "aton_self_energy_"+coordinator.api.username
+        self._attr_unique_id = "aton_self_energy_" + coordinator.api.username
 
     def update(self) -> None:
         self._attr_native_value = self.coordinator.api.status.self_consumed_energy
@@ -391,10 +387,10 @@ class SelfConsumedEnergy(BaseEnergySensor):
 class BoughtEnergy(BaseEnergySensor):
     """Representation of a Sensor"""
 
-    def __init__(self,coordinator: ApiCoordinator) -> None:
+    def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
         self._attr_name = coordinator.api.username + " Energia Comprata"
-        self._attr_unique_id = "aton_bought_energy_"+coordinator.api.username
+        self._attr_unique_id = "aton_bought_energy_" + coordinator.api.username
 
     def update(self) -> None:
         self._attr_native_value = self.coordinator.api.status.bought_energy
@@ -403,13 +399,14 @@ class BoughtEnergy(BaseEnergySensor):
 class ConsumedEnergy(BaseEnergySensor):
     """Representation of a Sensor"""
 
-    def __init__(self,coordinator: ApiCoordinator) -> None:
+    def __init__(self, coordinator: ApiCoordinator) -> None:
         super().__init__(coordinator)
         self._attr_name = coordinator.api.username + " Energia Consumata"
-        self._attr_unique_id = "aton_consumed_energy_"+coordinator.api.username
+        self._attr_unique_id = "aton_consumed_energy_" + coordinator.api.username
 
     def update(self) -> None:
         self._attr_native_value = self.coordinator.api.status.consumed_energy
+
 
 class SelfSufficiency(SensorEntity, CoordinatorEntity):
     """Representation of a Sensor."""
@@ -417,9 +414,7 @@ class SelfSufficiency(SensorEntity, CoordinatorEntity):
     @property
     def device_info(self) -> DeviceInfo | None:
         return {
-            "identifiers": {
-                (DOMAIN, "aton_storage_" + self.coordinator.api.username)
-            },
+            "identifiers": {(DOMAIN, "aton_storage_" + self.coordinator.api.username)},
         }
 
     def __init__(self, coordinator: ApiCoordinator) -> None:
@@ -435,4 +430,3 @@ class SelfSufficiency(SensorEntity, CoordinatorEntity):
         """Handle updated data from the coordinator."""
         self._attr_native_value = round(self.coordinator.api.status.self_sufficiency, 2)
         self.async_write_ha_state()
-
